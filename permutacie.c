@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #define DLZKA_SLOVA 4
-#define MAX_PERM 24
+//#define MAX_PERM 24
 int test = 1;
 
 void perm(char fix[], char str[], char pole_slov[][DLZKA_SLOVA]) {
@@ -20,7 +21,7 @@ void perm(char fix[], char str[], char pole_slov[][DLZKA_SLOVA]) {
 			pole_slov[test - 1][o] = slovo[o];
 		}
 		pole_slov[test - 1][o] = '\0';
-		//printf("%s %d\n", pole_slov[test - 1],test-1);
+		printf("%s %d\n", pole_slov[test - 1],test-1);
 		//end
 
 
@@ -34,7 +35,7 @@ void perm(char fix[], char str[], char pole_slov[][DLZKA_SLOVA]) {
 			pole_slov[test - 1][o] = slovo[o];
 		}
 		pole_slov[test - 1][o] = '\0';
-		//printf("%s %d\n", pole_slov[test - 1], test - 1);
+		printf("%s %d\n", pole_slov[test - 1], test - 1);
 		//end
 
 
@@ -79,20 +80,29 @@ int main() {
 	scanf("%4s", str);
 	
 	// start upravy
-	char pole_slov[MAX_PERM+1][DLZKA_SLOVA];
+	char **pole_slov;			//pole_slov[MAX_PERM+1][DLZKA_SLOVA];
+	int n = fact(strlen(str));
+	printf("%d\n", n);
+
+	pole_slov = (char**)calloc(n,sizeof(char*));
+
+	int i;
+	for (i = 0; i < n; i++) {
+		pole_slov[i] = (char*)calloc((DLZKA_SLOVA - 1),sizeof(char) );
+	}
+
 	//end
 
 	strupr(str);
 	perm(fix, str,pole_slov);
 
 	//start
-	int i;
-	for (i = 0; i < MAX_PERM; i++) {
-		printf("%s\n", pole_slov[i]);
-	}
+	/*for (i = 0; i < n; i++) {
+		printf("%s\n",	pole_slov[i]);
+	}*/
 
-	int n = fact(5);
-	printf("%d", n);
+
+	//free(pole_slov);
 	//end
 	
 	return 0;
