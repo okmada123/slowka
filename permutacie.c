@@ -70,6 +70,20 @@ int fact(int n) {
 	}
 }
 
+int chars_repeat(char *str) {
+	int i, o; {
+		for (i = 0; i < strlen(str)-1; i++) {
+			for (o = i+1; o < strlen(str); o++) {
+				//printf("i = %c, o = %c\n",str[i], str[o]);
+				if (str[i] == str[o]) {
+					return 1;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
 
 
 int main() {
@@ -86,17 +100,20 @@ int main() {
 	for (i = 0; i < n; i++) {
 		pole_slov[i] = (char*)calloc((strlen(str) ),sizeof(char) );			//..pre 2D dynamicke pole
 	}
-
 	//end
+
 
 	strupr(str);
 	perm(fix, str,pole_slov);
 
 	//start
+	if (chars_repeat(str)) {
+		printf("Opakuju sa\n");
+	}
+
 	for (i = 0; i < n; i++) {
 		printf("%s\n",	pole_slov[i]);
 	}
-
 
 	free(pole_slov);
 	//end
