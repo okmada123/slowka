@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define DLZKA_SLOVA 4
-//#define MAX_PERM 24
+#define DLZKA_SLOVA 10
 int test = 1;
 
-void perm(char fix[], char str[], char pole_slov[][DLZKA_SLOVA]) {
+void perm(char fix[], char str[], char **pole_slov) {
 	if (strlen(str) == 2) {
 		char slovo[DLZKA_SLOVA + 1];
 		int i,o;
@@ -21,7 +20,7 @@ void perm(char fix[], char str[], char pole_slov[][DLZKA_SLOVA]) {
 			pole_slov[test - 1][o] = slovo[o];
 		}
 		pole_slov[test - 1][o] = '\0';
-		printf("%s %d\n", pole_slov[test - 1],test-1);
+		//printf("%s %d\n", pole_slov[test - 1],test-1);
 		//end
 
 
@@ -35,7 +34,7 @@ void perm(char fix[], char str[], char pole_slov[][DLZKA_SLOVA]) {
 			pole_slov[test - 1][o] = slovo[o];
 		}
 		pole_slov[test - 1][o] = '\0';
-		printf("%s %d\n", pole_slov[test - 1], test - 1);
+		//printf("%s %d\n", pole_slov[test - 1], test - 1);
 		//end
 
 
@@ -80,15 +79,12 @@ int main() {
 	scanf("%4s", str);
 	
 	// start upravy
-	char **pole_slov;			//pole_slov[MAX_PERM+1][DLZKA_SLOVA];
-	int n = fact(strlen(str));
-	printf("%d\n", n);
+	int n = fact(strlen(str))
 
-	pole_slov = (char**)calloc(n,sizeof(char*));
-
-	int i;
+	char **pole_slov = (char**)calloc(n, sizeof(char*));					//alokovanie pamate ..
+	int i;																	//..
 	for (i = 0; i < n; i++) {
-		pole_slov[i] = (char*)calloc((DLZKA_SLOVA - 1),sizeof(char) );
+		pole_slov[i] = (char*)calloc((strlen(str) ),sizeof(char) );			//..pre 2D dynamicke pole
 	}
 
 	//end
@@ -97,12 +93,12 @@ int main() {
 	perm(fix, str,pole_slov);
 
 	//start
-	/*for (i = 0; i < n; i++) {
+	for (i = 0; i < n; i++) {
 		printf("%s\n",	pole_slov[i]);
-	}*/
+	}
 
 
-	//free(pole_slov);
+	free(pole_slov);
 	//end
 	
 	return 0;
