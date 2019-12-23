@@ -87,7 +87,6 @@ int chars_repeat(char *str) {
 int vymaz_opakovane(char** pole_slov, char** pole_slovNEW, int n) {
 	int i,o;
 	
-
 	for (i = 0; i < n-1; i++) {
 		for (o = i+1; o < n; o++) {
 			if (!strcmp(pole_slov[i], pole_slov[o])) {
@@ -101,13 +100,10 @@ int vymaz_opakovane(char** pole_slov, char** pole_slovNEW, int n) {
 	for (i = 0, o = 0; i < n; i++) {
 		if (pole_slov[i][0] != '*') {
 			strcat(pole_slovNEW[o++], pole_slov[i]);
-			//printf("nove pole %s\n", pole_slovNEW[i]);
 		}
 	}
 	return o;
 }
-
-
 
 int main() {
 	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "";
@@ -125,10 +121,7 @@ int main() {
 		pole_slov[i] = (char*)calloc((strlen(str) ),sizeof(char) );			//..
 		pole_slovNEW[i] = (char*)calloc((strlen(str)), sizeof(char));		//..pre 2D dynamicke pole
 	}
-
-	
 	//end
-
 
 	strupr(str);
 	perm(fix, str,pole_slov);
@@ -139,20 +132,13 @@ int main() {
 		int velkost_novehoP = vymaz_opakovane(pole_slov,pole_slovNEW,n);
 		
 		for (i = 0; i < velkost_novehoP; i++) {
-			printf("%s\n", pole_slovNEW[i]);
+			printf("%d %s\n",i+1, pole_slovNEW[i]);
 		}
-		/*while (pole_slovNEW[i] != '\0') {
-
-		}*/
-	}
-	else
-	{
+	} else {
 		for (i = 0; i < n; i++) {
-			printf("%s\n", pole_slov[i]);
+			printf("%d %s\n",i+1, pole_slov[i]);
 		}
 	}
-
-	
 
 	free(pole_slov);
 	free(pole_slovNEW);
