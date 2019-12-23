@@ -167,7 +167,7 @@ int main() {
 	free(pole_slov);
 	//free(pole_slovNEW);
 
-	//end
+	// end
 	
 	return 0;
 }
