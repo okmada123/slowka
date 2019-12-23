@@ -84,25 +84,39 @@ int chars_repeat(char *str) {
 	return 0;
 }
 
-int vymaz_opakovane(char** pole_slov, char** pole_slovNEW, int n) {
-	int i,o;
+int vymaz_opakovane(char** pole_slov, int n) {
+	int i,o, pocet_zmazanych = 0;
 	
 	for (i = 0; i < n-1; i++) {
 		for (o = i+1; o < n; o++) {
-			if (!strcmp(pole_slov[i], pole_slov[o])) {
-				printf("Zhoda %s%d = %s%d \n",pole_slov[i],i+1,pole_slov[o],o+1);
+
+			if (!strcmp(pole_slov[i], pole_slov[o]) && pole_slov[i][0] != '*') {
+				//printf("Zhoda %s%d = %s%d \n",pole_slov[i],i+1,pole_slov[o],o+1);
+
 				pole_slov[o][0] = '*';
+				pocet_zmazanych++;
 			}
 		}
 
 	}
 		
-	for (i = 0, o = 0; i < n; i++) {
+		
+	/*for (i = 0, o = 0; i < n; i++) {
+		if (pole_slov[i][0] != '*') {
+			strcat(pole_slovNEW[o++], pole_slov[i]);
+		}
+	}*/
+	printf("return z funkcie: %d\n", n - pocet_zmazanych);
+	return n - pocet_zmazanych;
+}
+
+void napln_nove(char** pole_slov, char** pole_slovNEW, int n) {
+	int o = 0;
+	for (int i = 0; i < n; i++) {
 		if (pole_slov[i][0] != '*') {
 			strcat(pole_slovNEW[o++], pole_slov[i]);
 		}
 	}
-	return o;
 }
 
 int main() {
@@ -115,11 +129,11 @@ int main() {
 	int n = fact(strlen(str));
 
 	char **pole_slov = (char**)calloc(n, sizeof(char*));					//alokovanie pamate ..
-	char **pole_slovNEW = (char**)calloc(n, sizeof(char*));					//.
+	//char **pole_slovNEW = (char**)calloc(n, sizeof(char*));					//.
 	int i;																	//..
 	for (i = 0; i < n; i++) {
 		pole_slov[i] = (char*)calloc((strlen(str) ),sizeof(char) );			//..
-		pole_slovNEW[i] = (char*)calloc((strlen(str)), sizeof(char));		//..pre 2D dynamicke pole
+		//pole_slovNEW[i] = (char*)calloc((strlen(str)), sizeof(char));		//..pre 2D dynamicke pole
 	}
 	//end
 
@@ -129,19 +143,29 @@ int main() {
 	//start
 	if (chars_repeat(str)) {
 		printf("Opakuju sa\n");
-		int velkost_novehoP = vymaz_opakovane(pole_slov,pole_slovNEW,n);
-		
+		int velkost_novehoP = vymaz_opakovane(pole_slov,n);
+		char** pole_slovNEW = (char**)calloc(velkost_novehoP, sizeof(char*));
+		for (i = 0; i < velkost_novehoP; i++) {
+			pole_slovNEW[i] = (char*)calloc((strlen(str)), sizeof(char));
+		}
+
+		//naplnit nove
+		napln_nove(pole_slov, pole_slovNEW, n);
+
+
 		for (i = 0; i < velkost_novehoP; i++) {
 			printf("%d %s\n",i+1, pole_slovNEW[i]);
 		}
+		printf("velkost noveho: %d\n", velkost_novehoP);
 	} else {
 		for (i = 0; i < n; i++) {
 			printf("%d %s\n",i+1, pole_slov[i]);
 		}
 	}
 
+
 	free(pole_slov);
-	free(pole_slovNEW);
+	//free(pole_slovNEW);
 
 	//end
 	
