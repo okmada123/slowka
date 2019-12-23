@@ -76,10 +76,10 @@ int main() {
 	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "";
 	//neviem jak dostat const. do toho scanf...
 	printf("Zadaj pismena, z ktorych chces skladat permutacie (bez medzery): ");
-	scanf("%4s", str);
+	scanf("%10s", str);
 	
 	// start upravy
-	int n = fact(strlen(str))
+	int n = fact(strlen(str));
 
 	char **pole_slov = (char**)calloc(n, sizeof(char*));					//alokovanie pamate ..
 	int i;																	//..
