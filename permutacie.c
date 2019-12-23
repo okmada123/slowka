@@ -89,8 +89,10 @@ int vymaz_opakovane(char** pole_slov, int n) {
 	
 	for (i = 0; i < n-1; i++) {
 		for (o = i+1; o < n; o++) {
+
 			if (!strcmp(pole_slov[i], pole_slov[o]) && pole_slov[i][0] != '*') {
 				//printf("Zhoda %s%d = %s%d \n",pole_slov[i],i+1,pole_slov[o],o+1);
+
 				pole_slov[o][0] = '*';
 				pocet_zmazanych++;
 			}
@@ -164,7 +166,8 @@ int main() {
 
 	free(pole_slov);
 	//free(pole_slovNEW);
-	//end
+
+	// end
 	
 	return 0;
 }
