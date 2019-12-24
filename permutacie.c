@@ -119,6 +119,8 @@ void napln_nove(char** pole_slov, char** pole_slovNEW, int n) {
 	}
 }
 
+
+
 int main() {
 	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "";
 	//neviem jak dostat const. do toho scanf...
@@ -136,6 +138,22 @@ int main() {
 		//pole_slovNEW[i] = (char*)calloc((strlen(str)), sizeof(char));		//..pre 2D dynamicke pole
 	}
 	//end
+	
+	int abc[26];
+
+	FILE* fr2;
+
+	fr2 = fopen("hodnoty.txt", "r");
+	int u, val;
+	char pismeno, eoln;
+	while (fscanf(fr2, "%c%d%c", &pismeno, &val, &eoln) >= 2) {
+		u = (int)pismeno - 'A';
+		abc[u] = val;
+		//printf("%d%c\n", abc[u],pismeno);
+	}
+	fclose(fr2);
+	
+	
 
 	strupr(str);
 	perm(fix, str,pole_slov);
@@ -143,7 +161,7 @@ int main() {
 	int velkost_novehoP;
 	//start
 	if (chars_repeat(str)) {
-		printf("Opakuju sa\n");
+		//printf("Opakuju sa\n");
 		velkost_novehoP = vymaz_opakovane(pole_slov, n);
 	}
 	else
@@ -196,16 +214,23 @@ int main() {
 	/*for (i = 0; i < pocet_legit_slov; i++)
 		printf("%s\n", pole_slovLEGIT[i]);*/
 	fclose(fr);
-
+	
 	//kazdy string v pole_slovLEGIT porovna, ci je substring nejakeho z pole_slovNEW
 	for (i = 0; i < pocet_legit_slov; i++) {
 		for (int o = 0; o < velkost_novehoP; o++) {
 			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
-				printf("%s\n", pole_slovLEGIT[i]);
+				val = 0;
+				for (u = 0; u < strlen(pole_slovLEGIT[i]); u++) {
+					val += abc[pole_slovLEGIT[i][u] - 'A'];
+				}
+
+				printf("%s %d\n", pole_slovLEGIT[i],val);
 				pole_slovLEGIT[i][0] = '\0';
 			}
 		}
 	}
+
+
 
 	free(pole_slovNEW);	
 	return 0;
