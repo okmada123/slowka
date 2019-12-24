@@ -173,7 +173,7 @@ int main() {
 	char pomocny_string[25];
 	fr = fopen("list.txt", "r");
 	while (fscanf(fr, "%s", pomocny_string) == 1) {
-		if (strlen(pomocny_string) <= DLZKA_SLOVA)
+		if (strlen(pomocny_string) <= strlen(str))
 			pocet_legit_slov++;
 	}
 	//printf("%d\n", pocet_legit_slov);
@@ -183,12 +183,12 @@ int main() {
 
 	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));
 	for (i = 0; i < pocet_legit_slov; i++) {
-		pole_slovLEGIT[i] = (char*)calloc(DLZKA_SLOVA + 1, sizeof(char));
+		pole_slovLEGIT[i] = (char*)calloc(strlen(str) + 1, sizeof(char));
 		pole_slovLEGIT[i][0] = '\0';
 	}
 	i = 0;
 	while (fscanf(fr, "%s", pomocny_string) == 1) {
-		if (strlen(pomocny_string) <= DLZKA_SLOVA)
+		if (strlen(pomocny_string) <= strlen(str))
 			strcpy(pole_slovLEGIT[i++], pomocny_string);
 	}
 
