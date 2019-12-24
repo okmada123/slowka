@@ -226,13 +226,15 @@ int main() {
 				}
 
 				printf("%s %d\n", pole_slovLEGIT[i],val);
+				if (strlen(pole_slovLEGIT[i]) >= 7)
+					printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");	//napise vykricniky po slove, ktore je za vsetkych 7 pismen
 				pole_slovLEGIT[i][0] = '\0';
 			}
 		}
 	}
 
-
-
 	free(pole_slovNEW);	
+	printf("Napis hocijake pismeno + enter pre ukoncenie.");
+	scanf("%s", &i);
 	return 0;
 }
