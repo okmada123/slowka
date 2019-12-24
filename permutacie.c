@@ -122,6 +122,7 @@ void napln_nove(char** pole_slov, char** pole_slovNEW, int n) {
 
 
 int main() {
+	
 	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "";
 	//neviem jak dostat const. do toho scanf...
 	printf("Zadaj pismena, ktore mas (bez medzery): ");
