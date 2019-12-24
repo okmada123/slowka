@@ -23,8 +23,8 @@ void perm(char fix[], char str[], char **pole_slov) {
 		//printf("%s %d\n", pole_slov[test - 1],test-1);
 		//end
 
-
-		printf("%d: %s\n", test++, slovo);
+		test++;
+		//printf("%d: %s\n", test++, slovo);
 		slovo[i] = str[1];
 		slovo[i + 1] = str[0];
 
@@ -37,8 +37,8 @@ void perm(char fix[], char str[], char **pole_slov) {
 		//printf("%s %d\n", pole_slov[test - 1], test - 1);
 		//end
 
-
-		printf("%d: %s\n", test++, slovo);
+		test++;
+		//printf("%d: %s\n", test++, slovo);
 
 		return;
 	}
@@ -106,7 +106,7 @@ int vymaz_opakovane(char** pole_slov, int n) {
 			strcat(pole_slovNEW[o++], pole_slov[i]);
 		}
 	}*/
-	printf("return z funkcie: %d\n", n - pocet_zmazanych);
+	//printf("return z funkcie: %d\n", n - pocet_zmazanych);
 	return n - pocet_zmazanych;
 }
 
@@ -140,34 +140,32 @@ int main() {
 	strupr(str);
 	perm(fix, str,pole_slov);
 
+	int velkost_novehoP;
 	//start
 	if (chars_repeat(str)) {
 		printf("Opakuju sa\n");
-		int velkost_novehoP = vymaz_opakovane(pole_slov,n);
-		char** pole_slovNEW = (char**)calloc(velkost_novehoP, sizeof(char*));
-		for (i = 0; i < velkost_novehoP; i++) {
-			pole_slovNEW[i] = (char*)calloc((strlen(str)), sizeof(char));
-		}
+		velkost_novehoP = vymaz_opakovane(pole_slov, n);
+	}
+	else
+		velkost_novehoP = n;
 
-		//naplnit nove
-		napln_nove(pole_slov, pole_slovNEW, n);
-
-
-		for (i = 0; i < velkost_novehoP; i++) {
-			printf("%d %s\n",i+1, pole_slovNEW[i]);
-		}
-		printf("velkost noveho: %d\n", velkost_novehoP);
-	} else {
-		for (i = 0; i < n; i++) {
-			printf("%d %s\n",i+1, pole_slov[i]);
-		}
+	//alokovat nove pole
+	char** pole_slovNEW = (char**)calloc(velkost_novehoP, sizeof(char*));
+	for (i = 0; i < velkost_novehoP; i++) {
+		pole_slovNEW[i] = (char*)calloc((strlen(str)), sizeof(char));		//2D - druhy rozmer
+		pole_slovNEW[i][0] = '\0';											//mmmmmmmmmmmmmmmmmmmmmmm
 	}
 
+	//naplnit nove
+	napln_nove(pole_slov, pole_slovNEW, n);
+
+	printf("Vypis noveho pola:\n");
+	for (i = 0; i < velkost_novehoP; i++) {
+		printf("%s\n", pole_slovNEW[i]);
+	}
 
 	free(pole_slov);
-	//free(pole_slovNEW);
-
-	// end
+	free(pole_slovNEW);
 	
 	return 0;
 }
