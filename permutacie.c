@@ -122,8 +122,8 @@ void napln_nove(char** pole_slov, char** pole_slovNEW, int n) {
 int main() {
 	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "";
 	//neviem jak dostat const. do toho scanf...
-	printf("Zadaj pismena, z ktorych chces skladat permutacie (bez medzery): ");
-	scanf("%10s", str);
+	printf("Zadaj pismena, ktore mas (bez medzery): ");
+	scanf("%7s", str);
 	
 	// start upravy
 	int n = fact(strlen(str));
@@ -191,9 +191,22 @@ int main() {
 		if (strlen(pomocny_string) <= DLZKA_SLOVA)
 			strcpy(pole_slovLEGIT[i++], pomocny_string);
 	}
-	for (i = 0; i < pocet_legit_slov; i++)
-		printf("%s\n", pole_slovLEGIT[i]);
+
+	//vypis legit slov
+	/*for (i = 0; i < pocet_legit_slov; i++)
+		printf("%s\n", pole_slovLEGIT[i]);*/
 	fclose(fr);
+
+	//kazdy string v pole_slovLEGIT porovna, ci je substring nejakeho z pole_slovNEW
+	for (i = 0; i < pocet_legit_slov; i++) {
+		for (int o = 0; o < velkost_novehoP; o++) {
+			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
+				printf("%s\n", pole_slovLEGIT[i]);
+				pole_slovLEGIT[i][0] = '\0';
+			}
+		}
+	}
+
 	free(pole_slovNEW);	
 	return 0;
 }
