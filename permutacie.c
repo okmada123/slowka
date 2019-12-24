@@ -234,7 +234,5 @@ int main() {
 	}
 
 	free(pole_slovNEW);	
-	printf("Napis hocijake pismeno + enter pre ukoncenie.");
-	scanf("%s", &i);
 	return 0;
 }
