@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define DLZKA_SLOVA 10
+#define DLZKA_SLOVA 7
 int test = 1;
 
 void perm(char fix[], char str[], char **pole_slov) {
@@ -159,13 +159,41 @@ int main() {
 	//naplnit nove
 	napln_nove(pole_slov, pole_slovNEW, n);
 
-	printf("Vypis noveho pola:\n");
+	//vypis permutacii (bez opakovania)
+
+	/*printf("Vypis noveho pola:\n");
 	for (i = 0; i < velkost_novehoP; i++) {
 		printf("%s\n", pole_slovNEW[i]);
-	}
-
+	}*/
 	free(pole_slov);
-	free(pole_slovNEW);
-	
+
+	//nacitanie slov z dictionary
+	FILE* fr;
+	int pocet_legit_slov = 0;
+	char pomocny_string[25];
+	fr = fopen("list.txt", "r");
+	while (fscanf(fr, "%s", pomocny_string) == 1) {
+		if (strlen(pomocny_string) <= DLZKA_SLOVA)
+			pocet_legit_slov++;
+	}
+	//printf("%d\n", pocet_legit_slov);
+	//pocet_legit_slov je teraz pocet slov, ktore su dlhe max DLZKA_SLOVA
+	fclose(fr);
+	fr = fopen("list.txt", "r");
+
+	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));
+	for (i = 0; i < pocet_legit_slov; i++) {
+		pole_slovLEGIT[i] = (char*)calloc(DLZKA_SLOVA + 1, sizeof(char));
+		pole_slovLEGIT[i][0] = '\0';
+	}
+	i = 0;
+	while (fscanf(fr, "%s", pomocny_string) == 1) {
+		if (strlen(pomocny_string) <= DLZKA_SLOVA)
+			strcpy(pole_slovLEGIT[i++], pomocny_string);
+	}
+	for (i = 0; i < pocet_legit_slov; i++)
+		printf("%s\n", pole_slovLEGIT[i]);
+	fclose(fr);
+	free(pole_slovNEW);	
 	return 0;
 }
