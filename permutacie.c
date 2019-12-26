@@ -223,7 +223,6 @@ int main() {
 	napln_nove(pole_slov, pole_slovNEW, n);
 	free(pole_slov);
 
-	
 	int pocet_legit_slov = legit_slova_counter(strlen(str));					//
 	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));	//
 	for (i = 0; i < pocet_legit_slov; i++) {
@@ -231,31 +230,28 @@ int main() {
 		pole_slovLEGIT[i][0] = '\0';
 	}
 	nacitaj_legit_slova(pole_slovLEGIT,strlen(str));							//
-
-	int abc[26];
-	ziskaj_hodnoty(abc);
 	
-	//kazdy string v pole_slovLEGIT porovna, ci je substring nejakeho z pole_slovNEW
-	int pocet_struktur = zisti_pocet_struktur(pocet_legit_slov, velkost_novehoP, pole_slovLEGIT, pole_slovNEW);
+	int pocet_struktur = zisti_pocet_struktur(	pocet_legit_slov, 
+												velkost_novehoP, 
+												pole_slovLEGIT, 
+												pole_slovNEW);
 	
-
-
-	nacitaj_legit_slova(pole_slovLEGIT, strlen(str));
+	nacitaj_legit_slova(pole_slovLEGIT, strlen(str)); //sprav nieco, aby sa nemuselo druhy krat nacitavat legit pole
 
 	struktura_slov* slovo = (struktura_slov*)malloc(sizeof(struktura_slov) * pocet_struktur);
-	for (i = 0; i < pocet_struktur; i++) {
-		slovo[i].slovo[0] = '\0';
-	}
-	int value, index = 0;
+	
+	int index = 0;
+	int abc[26];
+
+	ziskaj_hodnoty(abc);
 
 	for (i = 0; i < pocet_legit_slov; i++) {
 		for (int o = 0; o < velkost_novehoP; o++) {
 			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
-				strcpy(slovo[index].slovo, pole_slovLEGIT[i]);
-				value = zisti_hodnotu_slova(pole_slovLEGIT, abc, i);
 
-				slovo[index].hodnota = value;
-				//printf("%d\n", slovo[index].hodnota);
+				slovo[index].slovo[0] = '\0';
+				strcpy(slovo[index].slovo, pole_slovLEGIT[i]);
+				slovo[index].hodnota = zisti_hodnotu_slova(pole_slovLEGIT, abc, i);
 				pole_slovLEGIT[i][0] = '\0';
 				index++;
 			}
