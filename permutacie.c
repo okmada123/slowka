@@ -175,6 +175,19 @@ int zisti_hodnotu_slova(char **pole_slovLEGIT,int abc[], int i) {
 	return value;
 }
 
+int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char** pole_slovLEGIT, char** pole_slovNEW) {
+	int i, o, pocet_struktur = 0;
+	for (i = 0; i < pocet_legit_slov; i++) {
+		for (int o = 0; o < velkost_novehoP; o++) {
+			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
+				pocet_struktur++;
+				pole_slovLEGIT[i][0] = '\0';
+			}
+		}
+	}
+
+	return pocet_struktur;
+}
 
 
 
@@ -221,29 +234,19 @@ int main() {
 
 	int abc[26];
 	ziskaj_hodnoty(abc);
+	
 	//kazdy string v pole_slovLEGIT porovna, ci je substring nejakeho z pole_slovNEW
-	int pocet_struktur = 0;
-	int value;
-	for (i = 0; i < pocet_legit_slov; i++) {
-		for (int o = 0; o < velkost_novehoP; o++) {
-			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
-				value = zisti_hodnotu_slova(pole_slovLEGIT, abc, i);
-				pocet_struktur++;
-				printf("%s %d\n", pole_slovLEGIT[i],value);
+	int pocet_struktur = zisti_pocet_struktur(pocet_legit_slov, velkost_novehoP, pole_slovLEGIT, pole_slovNEW);
+	
 
-				if (strlen(pole_slovLEGIT[i]) >= 7)
-					printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");	//napise vykricniky po slove, ktore je za vsetkych 7 pismen
-				pole_slovLEGIT[i][0] = '\0';
-			}
-		}
-	}
 
+	nacitaj_legit_slova(pole_slovLEGIT, strlen(str));
 
 	struktura_slov* slovo = (struktura_slov*)malloc(sizeof(struktura_slov) * pocet_struktur);
 	for (i = 0; i < pocet_struktur; i++) {
 		slovo[i].slovo[0] = '\0';
 	}
-	int index = 0;
+	int value, index = 0;
 
 	for (i = 0; i < pocet_legit_slov; i++) {
 		for (int o = 0; o < velkost_novehoP; o++) {
@@ -252,10 +255,16 @@ int main() {
 				value = zisti_hodnotu_slova(pole_slovLEGIT, abc, i);
 
 				slovo[index].hodnota = value;
+				//printf("%d\n", slovo[index].hodnota);
 				pole_slovLEGIT[i][0] = '\0';
 				index++;
 			}
 		}
+	}
+	for (i = 0; i < pocet_struktur; i++) {
+		printf("%s %d\n", slovo[i].slovo, slovo[i].hodnota);
+		if (strlen(slovo[i].slovo) >= 7)
+			printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	}
 
 	free(pole_slovNEW);	
