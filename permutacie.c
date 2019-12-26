@@ -134,6 +134,34 @@ void ziskaj_hodnoty(char* abc[]) {
 
 }
 
+int legit_slova_counter(int str_len) {
+	FILE* fr;
+	int pocet_legit_slov = 0;
+	char pomocny_string[25];
+
+	fr = fopen("list.txt", "r");
+	while (fscanf(fr, "%s", pomocny_string) == 1) {
+		if (strlen(pomocny_string) <= str_len)
+			pocet_legit_slov++;
+	}
+	//printf("%d\n", pocet_legit_slov);
+	//pocet_legit_slov je teraz pocet slov, ktore su dlhe max DLZKA_SLOVA
+	fclose(fr);
+	return pocet_legit_slov;
+}
+
+void nacitaj_legit_slova(char **pole_slovLEGIT,int str_len) {
+	FILE* fr;
+	int i = 0;
+	char pomocny_string[25];
+	fr = fopen("list.txt", "r");
+
+	while (fscanf(fr, "%s", pomocny_string) == 1) {
+		if (strlen(pomocny_string) <= str_len)
+			strcpy(pole_slovLEGIT[i++], pomocny_string);
+	}
+	fclose(fr);
+}
 
 int main() {
 	
@@ -155,27 +183,24 @@ int main() {
 	ziskaj_hodnoty(abc);
 	
 	
-
 	strupr(str);
 	perm(fix, str,pole_slov);
 
 	int velkost_novehoP;
-	//start
+	
 	if (chars_repeat(str)) {
-		//printf("Opakuju sa\n");
 		velkost_novehoP = vymaz_opakovane(pole_slov, n);
 	}
 	else
 		velkost_novehoP = n;
 
-	//alokovat nove pole
-	char** pole_slovNEW = (char**)calloc(velkost_novehoP, sizeof(char*));
+	
+	char** pole_slovNEW = (char**)calloc(velkost_novehoP, sizeof(char*));	//alokovat nove pole
 	for (i = 0; i < velkost_novehoP; i++) {
 		pole_slovNEW[i] = (char*)calloc((strlen(str)), sizeof(char));		//2D - druhy rozmer
 		pole_slovNEW[i][0] = '\0';											//mmmmmmmmmmmmmmmmmmmmmmm
 	}
 
-	//naplnit nove
 	napln_nove(pole_slov, pole_slovNEW, n);
 
 	//vypis permutacii (bez opakovania)
@@ -186,35 +211,17 @@ int main() {
 	}*/
 	free(pole_slov);
 
-	//nacitanie slov z dictionary
-	FILE* fr;
-	int pocet_legit_slov = 0;
-	char pomocny_string[25];
-	fr = fopen("list.txt", "r");
-	while (fscanf(fr, "%s", pomocny_string) == 1) {
-		if (strlen(pomocny_string) <= strlen(str))
-			pocet_legit_slov++;
-	}
-	//printf("%d\n", pocet_legit_slov);
-	//pocet_legit_slov je teraz pocet slov, ktore su dlhe max DLZKA_SLOVA
-	fclose(fr);
-	fr = fopen("list.txt", "r");
-
+	////nacitanie slov z dictionary
+	int pocet_legit_slov = legit_slova_counter(strlen(str));
+	
 	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));
 	for (i = 0; i < pocet_legit_slov; i++) {
 		pole_slovLEGIT[i] = (char*)calloc(strlen(str) + 1, sizeof(char));
 		pole_slovLEGIT[i][0] = '\0';
 	}
-	i = 0;
-	while (fscanf(fr, "%s", pomocny_string) == 1) {
-		if (strlen(pomocny_string) <= strlen(str))
-			strcpy(pole_slovLEGIT[i++], pomocny_string);
-	}
 
-	//vypis legit slov
-	/*for (i = 0; i < pocet_legit_slov; i++)
-		printf("%s\n", pole_slovLEGIT[i]);*/
-	fclose(fr);
+	nacitaj_legit_slova(pole_slovLEGIT,strlen(str));
+
 	
 	//kazdy string v pole_slovLEGIT porovna, ci je substring nejakeho z pole_slovNEW
 	for (i = 0; i < pocet_legit_slov; i++) {
