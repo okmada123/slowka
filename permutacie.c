@@ -119,40 +119,40 @@ void napln_nove(char** pole_slov, char** pole_slovNEW, int n) {
 	}
 }
 
+void ziskaj_hodnoty(char* abc[]) {
+	FILE* fr2;
+
+	fr2 = fopen("hodnoty.txt", "r");
+	int i, value;
+	char pismeno, eoln;
+	while (fscanf(fr2, "%c%d%c", &pismeno, &value, &eoln) >= 2) {
+		i = (int)pismeno - 'A';
+		abc[i] = value;
+		//printf("%d%c\n", abc[u],pismeno);
+	}
+	fclose(fr2);
+
+}
 
 
 int main() {
 	
 	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "";
-	//neviem jak dostat const. do toho scanf...
+
 	printf("Zadaj pismena, ktore mas (bez medzery): ");
 	scanf("%7s", str);
 	
-	// start upravy
 	int n = fact(strlen(str));
+	int i;																	
 
 	char **pole_slov = (char**)calloc(n, sizeof(char*));					//alokovanie pamate ..
-	//char **pole_slovNEW = (char**)calloc(n, sizeof(char*));					//.
-	int i;																	//..
 	for (i = 0; i < n; i++) {
-		pole_slov[i] = (char*)calloc((strlen(str) ),sizeof(char) );			//..
-		//pole_slovNEW[i] = (char*)calloc((strlen(str)), sizeof(char));		//..pre 2D dynamicke pole
+		pole_slov[i] = (char*)calloc((strlen(str) ),sizeof(char) );			//..pre 2D dynamicke pole
 	}
-	//end
-	
-	int abc[26];
 
-	FILE* fr2;
-
-	fr2 = fopen("hodnoty.txt", "r");
 	int u, val;
-	char pismeno, eoln;
-	while (fscanf(fr2, "%c%d%c", &pismeno, &val, &eoln) >= 2) {
-		u = (int)pismeno - 'A';
-		abc[u] = val;
-		//printf("%d%c\n", abc[u],pismeno);
-	}
-	fclose(fr2);
+	int abc[26];
+	ziskaj_hodnoty(abc);
 	
 	
 
