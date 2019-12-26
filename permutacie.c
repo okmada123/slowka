@@ -4,6 +4,11 @@
 #define DLZKA_SLOVA 7
 int test = 1;
 
+typedef struct {
+	char slovo[15];
+	int hodnota;
+} struktura_slov;
+
 void perm(char fix[], char str[], char **pole_slov) {
 	if (strlen(str) == 2) {
 		char slovo[DLZKA_SLOVA + 1];
@@ -120,18 +125,16 @@ void napln_nove(char** pole_slov, char** pole_slovNEW, int n) {
 }
 
 void ziskaj_hodnoty(char* abc[]) {
-	FILE* fr2;
-
-	fr2 = fopen("hodnoty.txt", "r");
+	FILE* fr;
 	int i, value;
 	char pismeno, eoln;
-	while (fscanf(fr2, "%c%d%c", &pismeno, &value, &eoln) >= 2) {
+
+	fr = fopen("hodnoty.txt", "r");
+	while (fscanf(fr, "%c%d%c", &pismeno, &value, &eoln) >= 2) {
 		i = (int)pismeno - 'A';
 		abc[i] = value;
-		//printf("%d%c\n", abc[u],pismeno);
 	}
-	fclose(fr2);
-
+	fclose(fr);
 }
 
 int legit_slova_counter(int str_len) {
@@ -144,8 +147,6 @@ int legit_slova_counter(int str_len) {
 		if (strlen(pomocny_string) <= str_len)
 			pocet_legit_slov++;
 	}
-	//printf("%d\n", pocet_legit_slov);
-	//pocet_legit_slov je teraz pocet slov, ktore su dlhe max DLZKA_SLOVA
 	fclose(fr);
 	return pocet_legit_slov;
 }
@@ -154,8 +155,8 @@ void nacitaj_legit_slova(char **pole_slovLEGIT,int str_len) {
 	FILE* fr;
 	int i = 0;
 	char pomocny_string[25];
-	fr = fopen("list.txt", "r");
 
+	fr = fopen("list.txt", "r");
 	while (fscanf(fr, "%s", pomocny_string) == 1) {
 		if (strlen(pomocny_string) <= str_len)
 			strcpy(pole_slovLEGIT[i++], pomocny_string);
@@ -163,38 +164,43 @@ void nacitaj_legit_slova(char **pole_slovLEGIT,int str_len) {
 	fclose(fr);
 }
 
-int main() {
-	
-	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "";
+int zisti_hodnotu_slova(char **pole_slovLEGIT,int abc[], int i) {
+	int u,value = 0;
 
+	for (u = 0; u < strlen(pole_slovLEGIT[i]); u++) {
+		value += abc[pole_slovLEGIT[i][u] - 'A'];
+	}
+	if (strlen(pole_slovLEGIT[i]) >= 7)
+		value += 50;
+	return value;
+}
+
+
+
+
+int main() {
+	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "";
+	
 	printf("Zadaj pismena, ktore mas (bez medzery): ");
 	scanf("%7s", str);
-	
-	int n = fact(strlen(str));
-	int i;																	
 
+	int i,n = fact(strlen(str));
+	
 	char **pole_slov = (char**)calloc(n, sizeof(char*));					//alokovanie pamate ..
 	for (i = 0; i < n; i++) {
 		pole_slov[i] = (char*)calloc((strlen(str) ),sizeof(char) );			//..pre 2D dynamicke pole
 	}
 
-	int u, val;
-	int abc[26];
-	ziskaj_hodnoty(abc);
-	
-	
 	strupr(str);
 	perm(fix, str,pole_slov);
 
 	int velkost_novehoP;
-	
 	if (chars_repeat(str)) {
 		velkost_novehoP = vymaz_opakovane(pole_slov, n);
 	}
 	else
 		velkost_novehoP = n;
 
-	
 	char** pole_slovNEW = (char**)calloc(velkost_novehoP, sizeof(char*));	//alokovat nove pole
 	for (i = 0; i < velkost_novehoP; i++) {
 		pole_slovNEW[i] = (char*)calloc((strlen(str)), sizeof(char));		//2D - druhy rozmer
@@ -202,40 +208,52 @@ int main() {
 	}
 
 	napln_nove(pole_slov, pole_slovNEW, n);
-
-	//vypis permutacii (bez opakovania)
-
-	/*printf("Vypis noveho pola:\n");
-	for (i = 0; i < velkost_novehoP; i++) {
-		printf("%s\n", pole_slovNEW[i]);
-	}*/
 	free(pole_slov);
 
-	////nacitanie slov z dictionary
-	int pocet_legit_slov = legit_slova_counter(strlen(str));
 	
-	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));
+	int pocet_legit_slov = legit_slova_counter(strlen(str));					//
+	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));	//
 	for (i = 0; i < pocet_legit_slov; i++) {
-		pole_slovLEGIT[i] = (char*)calloc(strlen(str) + 1, sizeof(char));
+		pole_slovLEGIT[i] = (char*)calloc(strlen(str) + 1, sizeof(char));		//
 		pole_slovLEGIT[i][0] = '\0';
 	}
+	nacitaj_legit_slova(pole_slovLEGIT,strlen(str));							//
 
-	nacitaj_legit_slova(pole_slovLEGIT,strlen(str));
-
-	
+	int abc[26];
+	ziskaj_hodnoty(abc);
 	//kazdy string v pole_slovLEGIT porovna, ci je substring nejakeho z pole_slovNEW
+	int pocet_struktur = 0;
+	int value;
 	for (i = 0; i < pocet_legit_slov; i++) {
 		for (int o = 0; o < velkost_novehoP; o++) {
 			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
-				val = 0;
-				for (u = 0; u < strlen(pole_slovLEGIT[i]); u++) {
-					val += abc[pole_slovLEGIT[i][u] - 'A'];
-				}
+				value = zisti_hodnotu_slova(pole_slovLEGIT, abc, i);
+				pocet_struktur++;
+				printf("%s %d\n", pole_slovLEGIT[i],value);
 
-				printf("%s %d\n", pole_slovLEGIT[i],val);
 				if (strlen(pole_slovLEGIT[i]) >= 7)
 					printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");	//napise vykricniky po slove, ktore je za vsetkych 7 pismen
 				pole_slovLEGIT[i][0] = '\0';
+			}
+		}
+	}
+
+
+	struktura_slov* slovo = (struktura_slov*)malloc(sizeof(struktura_slov) * pocet_struktur);
+	for (i = 0; i < pocet_struktur; i++) {
+		slovo[i].slovo[0] = '\0';
+	}
+	int index = 0;
+
+	for (i = 0; i < pocet_legit_slov; i++) {
+		for (int o = 0; o < velkost_novehoP; o++) {
+			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
+				strcpy(slovo[index].slovo, pole_slovLEGIT[i]);
+				value = zisti_hodnotu_slova(pole_slovLEGIT, abc, i);
+
+				slovo[index].hodnota = value;
+				pole_slovLEGIT[i][0] = '\0';
+				index++;
 			}
 		}
 	}
