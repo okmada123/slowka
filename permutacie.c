@@ -175,7 +175,7 @@ int zisti_hodnotu_slova(char **pole_slovLEGIT,int abc[], int i) {
 	return value;
 }
 
-int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char** pole_slovLEGIT, char** pole_slovNEW) {
+int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole_slovLEGIT, char** pole_slovNEW) {
 	int i, o, pocet_struktur = 0;
 	for (i = 0; i < pocet_legit_slov; i++) {
 		for (int o = 0; o < velkost_novehoP; o++) {
@@ -188,7 +188,6 @@ int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char** pole
 
 	return pocet_struktur;
 }
-
 
 
 int main() {
@@ -231,7 +230,7 @@ int main() {
 	}
 	nacitaj_legit_slova(pole_slovLEGIT,strlen(str));							//
 	
-	int pocet_struktur = zisti_pocet_struktur(	pocet_legit_slov, 
+	int pocet_struktur = zisti_pocet_struktur(	pocet_legit_slov,	//keby sa dalo pole poslat ako kopia, nemuseli by sa nacitavaz znovu legit slova
 												velkost_novehoP, 
 												pole_slovLEGIT, 
 												pole_slovNEW);
@@ -257,6 +256,7 @@ int main() {
 			}
 		}
 	}
+
 	for (i = 0; i < pocet_struktur; i++) {
 		printf("%s %d\n", slovo[i].slovo, slovo[i].hodnota);
 		if (strlen(slovo[i].slovo) >= 7)
