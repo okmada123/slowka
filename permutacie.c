@@ -280,7 +280,7 @@ int main() {
 
 
 	//vypis permutacii
-	printf("\nVyhovujuce slova:\n");
+	printf("\nVyhovujuce slova: (%d)\n", pocet_struktur);
 	for (i = 0; i < pocet_struktur; i++) {
 		printf("%s %d\n", slovo[i].slovo, slovo[i].hodnota);
 	}
