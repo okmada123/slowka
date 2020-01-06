@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define DLZKA_SLOVA 7
+#define DLZKA_SLOVA 8
 int test = 1;
 
 typedef struct {
@@ -89,10 +89,12 @@ int chars_repeat(char *str) {
 	return 0;
 }
 
-int vymaz_opakovane(char** pole_slov, int n) {
-	int i,o, pocet_zmazanych = 0;
+int vymaz_opakovane(char** pole_slov, int n) {	//aj toto trva dlho
+	int i,o, pocet_zmazanych = 0, percento = n / 99;
 	
 	for (i = 0; i < n-1; i++) {
+		if (i % percento == 0)
+			printf("#");
 		for (o = i+1; o < n; o++) {
 
 			if (!strcmp(pole_slov[i], pole_slov[o]) && pole_slov[i][0] != '*') {
@@ -102,16 +104,8 @@ int vymaz_opakovane(char** pole_slov, int n) {
 				pocet_zmazanych++;
 			}
 		}
-
 	}
-		
-		
-	/*for (i = 0, o = 0; i < n; i++) {
-		if (pole_slov[i][0] != '*') {
-			strcat(pole_slovNEW[o++], pole_slov[i]);
-		}
-	}*/
-	//printf("return z funkcie: %d\n", n - pocet_zmazanych);
+	printf("\n");
 	return n - pocet_zmazanych;
 }
 
@@ -141,7 +135,6 @@ int legit_slova_counter(int str_len) {
 	FILE* fr;
 	int pocet_legit_slov = 0;
 	char pomocny_string[25];
-
 	fr = fopen("list.txt", "r");
 	while (fscanf(fr, "%s", pomocny_string) == 1) {
 		if (strlen(pomocny_string) <= str_len)
@@ -176,8 +169,11 @@ int zisti_hodnotu_slova(char **pole_slovLEGIT,int abc[], int i) {
 }
 
 int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole_slovLEGIT, char** pole_slovNEW) {
-	int i, o, pocet_struktur = 0;
+	//TOTO TRVA DLHO !!!!	
+	int i, o, pocet_struktur = 0, percento = pocet_legit_slov / 99;
 	for (i = 0; i < pocet_legit_slov; i++) {
+		if (i % percento == 0)
+			printf("#");
 		for (int o = 0; o < velkost_novehoP; o++) {
 			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
 				pocet_struktur++;
@@ -185,7 +181,7 @@ int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole
 			}
 		}
 	}
-
+	printf("\n");
 	return pocet_struktur;
 }
 
@@ -194,7 +190,7 @@ int main() {
 	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "";
 	
 	printf("Zadaj pismena, ktore mas (bez medzery): ");
-	scanf("%7s", str);
+	scanf("%8s", str);
 
 	int i,n = fact(strlen(str));
 	
@@ -202,6 +198,14 @@ int main() {
 	for (i = 0; i < n; i++) {
 		pole_slov[i] = (char*)calloc((strlen(str) ),sizeof(char) );			//..pre 2D dynamicke pole
 	}
+	printf("\n");
+	for (i = 1; i <= 100; i++) {
+		if (i % 10 == 0)
+			printf("%%");
+		else
+			printf(".");
+	}
+	
 
 	strupr(str);
 	printf("\nVytvaram permutacie...\n");
@@ -223,6 +227,7 @@ int main() {
 	napln_nove(pole_slov, pole_slovNEW, n);
 	free(pole_slov);
 
+	printf("Nacitavam slova zo slovnika...\n");
 	int pocet_legit_slov = legit_slova_counter(strlen(str));					//
 	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));	//
 	for (i = 0; i < pocet_legit_slov; i++) {
@@ -232,10 +237,9 @@ int main() {
 	nacitaj_legit_slova(pole_slovLEGIT,strlen(str));							//
 	
 	int pocet_struktur = zisti_pocet_struktur(	pocet_legit_slov,	//keby sa dalo pole poslat ako kopia, nemuseli by sa nacitavaz znovu legit slova
-												velkost_novehoP, 
+												velkost_novehoP,	//TOTO TRVA DLHO ALE UZ VYBAVENE
 												pole_slovLEGIT, 
 												pole_slovNEW);
-	
 	nacitaj_legit_slova(pole_slovLEGIT, strlen(str)); //sprav nieco, aby sa nemuselo druhy krat nacitavat legit pole
 
 	struktura_slov* slovo = (struktura_slov*)malloc(sizeof(struktura_slov) * pocet_struktur);
@@ -243,12 +247,15 @@ int main() {
 	int index = 0;
 	int abc[26];
 
-	ziskaj_hodnoty(abc);
+	ziskaj_hodnoty(abc); //iba nacita za kolko je ake pismeno bodov
+	//TOTO TRVA DLHO !!!!!!!!!
 	printf("Hladam slova...\n");
+	int percento = pocet_legit_slov / 99;
 	for (i = 0; i < pocet_legit_slov; i++) {
+		if (i % percento == 0)
+			printf("#");
 		for (int o = 0; o < velkost_novehoP; o++) {
 			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
-
 				slovo[index].slovo[0] = '\0';
 				strcpy(slovo[index].slovo, pole_slovLEGIT[i]);
 				slovo[index].hodnota = zisti_hodnotu_slova(pole_slovLEGIT, abc, i);
@@ -258,7 +265,7 @@ int main() {
 		}
 	}
 
-	printf("Zoradujem slova...\n");
+	printf("\nZoradujem slova...\n");
 	//zoradenie struktur:
 	//pocet_struktur = pocet slov, ktore sa budu vypisovat a teda aj pocet slov, ktore treba zoradit
 	for (int o = 0; o < pocet_struktur; o++) {
