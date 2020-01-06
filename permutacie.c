@@ -257,11 +257,32 @@ int main() {
 			}
 		}
 	}
+
+	printf("Zoradujem slova...\n");
+	//zoradenie struktur:
+	//pocet_struktur = pocet slov, ktore sa budu vypisovat a teda aj pocet slov, ktore treba zoradit
+	for (int o = 0; o < pocet_struktur; o++) {
+		for (i = 0; i < pocet_struktur - 1; i++) {
+			if (slovo[i].hodnota < slovo[i + 1].hodnota) {
+				//vymena tych dvoch medzi sebou
+				int pom = slovo[i].hodnota;
+				char pom_string[15];
+				strcpy(pom_string, slovo[i].slovo);
+				slovo[i].hodnota = slovo[i + 1].hodnota;
+				slovo[i].slovo[0] = '\0';
+				strcpy(slovo[i].slovo, slovo[i + 1].slovo);
+				slovo[i + 1].hodnota = pom;
+				slovo[i + 1].slovo[0] = '\0';
+				strcpy(slovo[i + 1].slovo, pom_string);
+			}
+		}
+	}
+
+
+	//vypis permutacii
 	printf("\nVyhovujuce slova:\n");
 	for (i = 0; i < pocet_struktur; i++) {
 		printf("%s %d\n", slovo[i].slovo, slovo[i].hodnota);
-		if (strlen(slovo[i].slovo) >= 7)
-			printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	}
 
 	free(pole_slovNEW);	
