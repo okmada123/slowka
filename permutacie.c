@@ -204,6 +204,7 @@ int main() {
 	}
 
 	strupr(str);
+	printf("\nVytvaram permutacie...\n");
 	perm(fix, str,pole_slov);
 
 	int velkost_novehoP;
@@ -243,7 +244,7 @@ int main() {
 	int abc[26];
 
 	ziskaj_hodnoty(abc);
-
+	printf("Hladam slova...\n");
 	for (i = 0; i < pocet_legit_slov; i++) {
 		for (int o = 0; o < velkost_novehoP; o++) {
 			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
@@ -256,7 +257,7 @@ int main() {
 			}
 		}
 	}
-
+	printf("\nVyhovujuce slova:\n");
 	for (i = 0; i < pocet_struktur; i++) {
 		printf("%s %d\n", slovo[i].slovo, slovo[i].hodnota);
 		if (strlen(slovo[i].slovo) >= 7)
