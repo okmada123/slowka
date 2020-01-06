@@ -12,7 +12,7 @@ typedef struct {
 void perm(char fix[], char str[], char **pole_slov) {
 	if (strlen(str) == 2) {
 		char slovo[DLZKA_SLOVA + 1];
-		int i,o;
+		unsigned int i,o;
 		for (i = 0; i < strlen(fix); i++)
 			slovo[i] = fix[i];
 		slovo[i + 2] = '\0';
@@ -48,7 +48,7 @@ void perm(char fix[], char str[], char **pole_slov) {
 		return;
 	}
 	else {
-		int i;
+		unsigned int i;
 		char novyfix[DLZKA_SLOVA + 1] = "";
 		strcat(novyfix, fix);
 		novyfix[strlen(novyfix) + 1] = '\0';
@@ -58,7 +58,7 @@ void perm(char fix[], char str[], char **pole_slov) {
 			//printf("%s\n", novyfix); //toto vyzera ze funguje zatim
 			char novystr[DLZKA_SLOVA + 1] = ""; //taky isty ako stary ale bez toho jednoho pismena
 			strcat(novystr, str);
-			for (int j = i; j < strlen(novystr); j++) {
+			for (unsigned int j = i; j < strlen(novystr); j++) {
 				novystr[j] = novystr[j + 1];
 			}
 			perm(novyfix, novystr,pole_slov);
@@ -76,7 +76,7 @@ int fact(int n) {
 }
 
 int chars_repeat(char *str) {
-	int i, o; {
+	unsigned int i, o; {
 		for (i = 0; i < strlen(str)-1; i++) {
 			for (o = i+1; o < strlen(str); o++) {
 				//printf("i = %c, o = %c\n",str[i], str[o]);
@@ -124,7 +124,7 @@ void napln_nove(char** pole_slov, char** pole_slovNEW, int n) {
 	}
 }
 
-void ziskaj_hodnoty(char* abc[]) {
+void ziskaj_hodnoty(int abc[]) {
 	FILE* fr;
 	int i, value;
 	char pismeno, eoln;
@@ -132,15 +132,16 @@ void ziskaj_hodnoty(char* abc[]) {
 	fr = fopen("hodnoty.txt", "r");
 	while (fscanf(fr, "%c%d%c", &pismeno, &value, &eoln) >= 2) {
 		i = (int)pismeno - 'A';
-		abc[i] = value;
+		(int) abc[i] = value;
 	}
 	fclose(fr);
 }
 
-int legit_slova_counter(int str_len) {
+int legit_slova_counter(unsigned int str_len) {
 	FILE* fr;
 	int pocet_legit_slov = 0;
 	char pomocny_string[25];
+	pomocny_string[0] = '\0';
 
 	fr = fopen("list.txt", "r");
 	while (fscanf(fr, "%s", pomocny_string) == 1) {
@@ -151,10 +152,11 @@ int legit_slova_counter(int str_len) {
 	return pocet_legit_slov;
 }
 
-void nacitaj_legit_slova(char **pole_slovLEGIT,int str_len) {
+void nacitaj_legit_slova(char **pole_slovLEGIT,unsigned int str_len) {
 	FILE* fr;
 	int i = 0;
 	char pomocny_string[25];
+	pomocny_string[0] = '\0';
 
 	fr = fopen("list.txt", "r");
 	while (fscanf(fr, "%s", pomocny_string) == 1) {
@@ -165,7 +167,7 @@ void nacitaj_legit_slova(char **pole_slovLEGIT,int str_len) {
 }
 
 int zisti_hodnotu_slova(char **pole_slovLEGIT,int abc[], int i) {
-	int u,value = 0;
+	unsigned int u,value = 0;
 
 	for (u = 0; u < strlen(pole_slovLEGIT[i]); u++) {
 		value += abc[pole_slovLEGIT[i][u] - 'A'];
@@ -178,7 +180,7 @@ int zisti_hodnotu_slova(char **pole_slovLEGIT,int abc[], int i) {
 int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole_slovLEGIT, char** pole_slovNEW) {
 	int i, o, pocet_struktur = 0;
 	for (i = 0; i < pocet_legit_slov; i++) {
-		for (int o = 0; o < velkost_novehoP; o++) {
+		for ( o = 0; o < velkost_novehoP; o++) {
 			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
 				pocet_struktur++;
 				pole_slovLEGIT[i][0] = '\0';
@@ -266,3 +268,4 @@ int main() {
 	free(pole_slovNEW);	
 	return 0;
 }
+
