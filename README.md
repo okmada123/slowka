@@ -15,4 +15,6 @@ Zaciname s optimalizaciou.
 
 Beh programu s 8 pismenami: AOSMRNEI trval 39 sekund.
 
-A bolo ich nieco okolo 150
+A bolo ich 182.
+
+Po optimalizacii to trva 3-4 sekundy. To som uprimne necakal.
