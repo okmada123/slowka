@@ -262,7 +262,7 @@ int main() {
 		}
 	}
 	/*for (i = 0; i < 26; i++)
-		printf("%d\n", zaciatocny_index_pismena[i]);*/
+		printf("%s\n", pole_slovLEGIT[zaciatocny_index_pismena[i]]);*/
 
 	ziskaj_hodnoty(abc); //iba nacita za kolko je ake pismeno bodov
 	//TOTO TRVA DLHO !!!!!!!!!
@@ -285,10 +285,22 @@ int main() {
 
 	index = 0;
 	//iny sposob hladania slov:
+	int percento = velkost_novehoP / 99;
 	for (i = 0; i < velkost_novehoP; i++) {		//prechadza permutacie
 		//int nejake_cislo = pole_slovNEW[i][0] - 'A';
 		//printf("nejakecislo: %d\n", nejake_cislo);
-		for (int o = zaciatocny_index_pismena[pole_slovNEW[i][0] - 'A']; pole_slovNEW[i][0] == pole_slovLEGIT[o][0] && o < pocet_legit_slov; o++) {		//tu musi byt optimalizovany cyklus - zaujima ma zaciatocne pismeno permutacie
+		int zaciatok, koniec;
+		char prve_pismeno_slova = pole_slovNEW[i][0];
+		if (i % percento == 0)
+			printf("#");
+		zaciatok = zaciatocny_index_pismena[prve_pismeno_slova - 'A'];
+		if (prve_pismeno_slova != 'Z') {
+			koniec = zaciatocny_index_pismena[prve_pismeno_slova + 1 - 'A'];
+		}
+		else
+			koniec = pocet_legit_slov;
+
+		for (int o = zaciatok; o < koniec; o++) {		//tu musi byt optimalizovany cyklus - zaujima ma zaciatocne pismeno permutacie
 			if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0') {
 				slovo[index].slovo[0] = '\0';
 				strcpy(slovo[index].slovo, pole_slovLEGIT[o]);
