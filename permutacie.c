@@ -171,18 +171,27 @@ int zisti_hodnotu_slova(char **pole_slovLEGIT,int abc[], int i) {
 	return value;
 }
 
-int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole_slovLEGIT, char** pole_slovNEW) {
+int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole_slovLEGIT, char** pole_slovNEW, int zaciatocny_index_pismena[]) {
 	//TOTO TRVA DLHO !!!!	
-	int i, o, pocet_struktur = 0, percento = pocet_legit_slov / 99;
-	for (i = 0; i < pocet_legit_slov; i++) {
 
+	int i, o, pocet_struktur = 0, percento = velkost_novehoP / 99;
+	for (i = 0; i < velkost_novehoP; i++) {		//prechadza permutacie
+		int zaciatok, koniec;
+		char prve_pismeno_slova = pole_slovNEW[i][0];
 		if (i % percento == 0)
 			printf("#");
-		for (int o = 0; o < velkost_novehoP; o++) {
+		zaciatok = zaciatocny_index_pismena[prve_pismeno_slova - 'A'];
+		if (prve_pismeno_slova != 'Z') {
+			koniec = zaciatocny_index_pismena[prve_pismeno_slova + 1 - 'A'];
+		}
+		else
+			koniec = pocet_legit_slov;
 
-			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
+		for (int o = zaciatok; o < koniec; o++) {		//tu musi byt optimalizovany cyklus - zaujima ma zaciatocne pismeno permutacie
+			if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0') {		
+				pole_slovLEGIT[o][0] = '\0';
+
 				pocet_struktur++;
-				pole_slovLEGIT[i][0] = '\0';
 			}
 		}
 	}
@@ -232,6 +241,10 @@ int main() {
 	napln_nove(pole_slov, pole_slovNEW, n);
 	free(pole_slov);
 
+	//vypis vsetkych permutacii, kontrola
+	/*for (i = 0; i < velkost_novehoP; i++)
+		printf("%s\n", pole_slovNEW[i]);*/
+
 	printf("Nacitavam slova zo slovnika...\n");
 	int pocet_legit_slov = legit_slova_counter(strlen(str));					//
 	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));	//
@@ -241,30 +254,59 @@ int main() {
 	}
 	nacitaj_legit_slova(pole_slovLEGIT,strlen(str));							//
 	
+	//zistenie, na akych indexoch zacinaju ktore pismena v poli legit slov:
+	int index = 0;
+	int zaciatocny_index_pismena[26];
+	zaciatocny_index_pismena[index++] = 0;
+	char hladame = 'B';
+	for (i = 0; i < pocet_legit_slov; i++) {
+		if (pole_slovLEGIT[i][0] == hladame) {
+			zaciatocny_index_pismena[index++] = i;
+			hladame++;
+		}
+	}
+	/*for (i = 0; i < 26; i++)
+		printf("%s\n", pole_slovLEGIT[zaciatocny_index_pismena[i]]);*/
+
 	int pocet_struktur = zisti_pocet_struktur(	pocet_legit_slov,	//keby sa dalo pole poslat ako kopia, nemuseli by sa nacitavaz znovu legit slova
 												velkost_novehoP,	//TOTO TRVA DLHO ALE UZ VYBAVENE
 												pole_slovLEGIT, 
-												pole_slovNEW);
+												pole_slovNEW,
+												zaciatocny_index_pismena);
 	nacitaj_legit_slova(pole_slovLEGIT, strlen(str)); //sprav nieco, aby sa nemuselo druhy krat nacitavat legit pole
 
 	struktura_slov* slovo = (struktura_slov*)malloc(sizeof(struktura_slov) * pocet_struktur);
 	
-	int index = 0;
 	int abc[26];
+
 
 	ziskaj_hodnoty(abc); //iba nacita za kolko je ake pismeno bodov
 	//TOTO TRVA DLHO !!!!!!!!!
 	printf("Hladam slova...\n");
-	int percento = pocet_legit_slov / 99;
-	for (i = 0; i < pocet_legit_slov; i++) {
+
+	index = 0;
+	//iny sposob hladania slov:
+	int percento = velkost_novehoP / 99;
+	for (i = 0; i < velkost_novehoP; i++) {		//prechadza permutacie
+		//int nejake_cislo = pole_slovNEW[i][0] - 'A';
+		//printf("nejakecislo: %d\n", nejake_cislo);
+		int zaciatok, koniec;
+		char prve_pismeno_slova = pole_slovNEW[i][0];
 		if (i % percento == 0)
 			printf("#");
-		for (int o = 0; o < velkost_novehoP; o++) {
-			if (strlen(pole_slovLEGIT[i]) > 2 && strstr(pole_slovNEW[o], pole_slovLEGIT[i]) != NULL && pole_slovLEGIT[i][0] != '\0') {
+		zaciatok = zaciatocny_index_pismena[prve_pismeno_slova - 'A'];
+		if (prve_pismeno_slova != 'Z') {
+			koniec = zaciatocny_index_pismena[prve_pismeno_slova + 1 - 'A'];
+		}
+		else
+			koniec = pocet_legit_slov;
+
+		for (int o = zaciatok; o < koniec; o++) {		//tu musi byt optimalizovany cyklus - zaujima ma zaciatocne pismeno permutacie
+			if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0') {
 				slovo[index].slovo[0] = '\0';
-				strcpy(slovo[index].slovo, pole_slovLEGIT[i]);
-				slovo[index].hodnota = zisti_hodnotu_slova(pole_slovLEGIT, abc, i);
-				pole_slovLEGIT[i][0] = '\0';
+				strcpy(slovo[index].slovo, pole_slovLEGIT[o]);
+				slovo[index].hodnota = zisti_hodnotu_slova(pole_slovLEGIT, abc, o);
+				pole_slovLEGIT[o][0] = '\0';
 				index++;
 			}
 		}
@@ -291,7 +333,7 @@ int main() {
 	}
 
 
-	//vypis permutacii
+	//vypis slov
 	printf("\nVyhovujuce slova: (%d)\n", pocet_struktur);
 	for (i = 0; i < pocet_struktur; i++) {
 		printf("%s %d\n", slovo[i].slovo, slovo[i].hodnota);
