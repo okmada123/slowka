@@ -79,14 +79,25 @@ int chars_repeat(char *str) {
 	}
 	return 0;
 }
+void nacitavanie_percent(int n, int i) {
+	int percento = (n / 99) > 0 ? n / 99 : 1;
+
+	if ((i % percento == 0) && n > 100)
+		printf("#");
+	else if (n < 100) {
+		percento = 1 * 100 / n;
+		for (int o = 0; o < percento; o++) {
+			printf("#");
+		}
+	}
+}
 
 int vymaz_opakovane(char** pole_slov, int n) {	//aj toto trva dlho
 	int i, o, pocet_zmazanych = 0;
-	int percento = (n / 99)>0 ? n/99 : 1;
 	
 	for (i = 0; i < n-1; i++) {
-		if (i % percento == 0)
-			printf("#");
+		nacitavanie_percent(n, i);
+
 		for (o = i+1; o < n; o++) {
 
 			if (!strcmp(pole_slov[i], pole_slov[o]) && pole_slov[i][0] != '*') {
@@ -167,15 +178,13 @@ int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole
 	//TOTO TRVA DLHO !!!!	
 
 	int i, o, pocet_struktur = 0;
-	int percento = (velkost_novehoP / 99) > 0 ? velkost_novehoP / 99 : 1;
 	
 	for (i = 0; i < velkost_novehoP; i++) {		//prechadza permutacie
 		int zaciatok, koniec;
 		char prve_pismeno_slova = pole_slovNEW[i][0];
 
 		
-		if (i % percento == 0)
-			printf("#");
+		nacitavanie_percent(velkost_novehoP, i);
 
 		zaciatok = zaciatocny_index_pismena[prve_pismeno_slova - 'A'];
 		if (prve_pismeno_slova != 'Z') {
@@ -283,14 +292,14 @@ int main() {
 
 	index = 0;
 	//iny sposob hladania slov:
-	int percento = (velkost_novehoP / 99) > 0 ? velkost_novehoP / 99 : 1;
 	for (i = 0; i < velkost_novehoP; i++) {		//prechadza permutacie
 		//int nejake_cislo = pole_slovNEW[i][0] - 'A';
 		//printf("nejakecislo: %d\n", nejake_cislo);
 		int zaciatok, koniec;
 		char prve_pismeno_slova = pole_slovNEW[i][0];
-		if (i % percento == 0)
-			printf("#");
+		
+		nacitavanie_percent(velkost_novehoP, i);
+
 		zaciatok = zaciatocny_index_pismena[prve_pismeno_slova - 'A'];
 		if (prve_pismeno_slova != 'Z') {
 			koniec = zaciatocny_index_pismena[prve_pismeno_slova + 1 - 'A'];
