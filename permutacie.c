@@ -81,7 +81,8 @@ int chars_repeat(char *str) {
 }
 
 int vymaz_opakovane(char** pole_slov, int n) {	//aj toto trva dlho
-	int i,o, pocet_zmazanych = 0, percento = n / 99;
+	int i, o, pocet_zmazanych = 0;
+	int percento = (n / 99)>0 ? n/99 : 1;
 	
 	for (i = 0; i < n-1; i++) {
 		if (i % percento == 0)
@@ -165,15 +166,14 @@ int zisti_hodnotu_slova(char **pole_slovLEGIT,int abc[], int i) {
 int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole_slovLEGIT, char** pole_slovNEW, int zaciatocny_index_pismena[]) {
 	//TOTO TRVA DLHO !!!!	
 
-	int i, o, pocet_struktur = 0, percento = velkost_novehoP / 100;
-	printf("100%% = %d, percento = %d\n",velkost_novehoP, percento);
+	int i, o, pocet_struktur = 0;
+	int percento = (velkost_novehoP / 99) > 0 ? velkost_novehoP / 99 : 1;
+	
 	for (i = 0; i < velkost_novehoP; i++) {		//prechadza permutacie
 		int zaciatok, koniec;
 		char prve_pismeno_slova = pole_slovNEW[i][0];
 
-		if (percento == 0) {
-			percento = 1;
-		}
+		
 		if (i % percento == 0)
 			printf("#");
 
@@ -283,7 +283,7 @@ int main() {
 
 	index = 0;
 	//iny sposob hladania slov:
-	int percento = velkost_novehoP / 99;
+	int percento = (velkost_novehoP / 99) > 0 ? velkost_novehoP / 99 : 1;
 	for (i = 0; i < velkost_novehoP; i++) {		//prechadza permutacie
 		//int nejake_cislo = pole_slovNEW[i][0] - 'A';
 		//printf("nejakecislo: %d\n", nejake_cislo);
