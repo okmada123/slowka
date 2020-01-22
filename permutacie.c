@@ -19,31 +19,22 @@ void perm(char fix[], char str[], char **pole_slov) {
 		slovo[i] = str[0];
 		slovo[i + 1] = str[1];
 
-
-		//start
 		for (o = 0; o < strlen(slovo); o++) {
 			pole_slov[test - 1][o] = slovo[o];
 		}
 		pole_slov[test - 1][o] = '\0';
-		//printf("%s %d\n", pole_slov[test - 1],test-1);
-		//end
 
 		test++;
-		//printf("%d: %s\n", test++, slovo);
+
 		slovo[i] = str[1];
 		slovo[i + 1] = str[0];
 
-
-		//start
 		for (o = 0; o < strlen(slovo); o++) {
 			pole_slov[test - 1][o] = slovo[o];
 		}
 		pole_slov[test - 1][o] = '\0';
-		//printf("%s %d\n", pole_slov[test - 1], test - 1);
-		//end
 
 		test++;
-		//printf("%d: %s\n", test++, slovo);
 
 		return;
 	}
@@ -174,12 +165,18 @@ int zisti_hodnotu_slova(char **pole_slovLEGIT,int abc[], int i) {
 int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole_slovLEGIT, char** pole_slovNEW, int zaciatocny_index_pismena[]) {
 	//TOTO TRVA DLHO !!!!	
 
-	int i, o, pocet_struktur = 0, percento = velkost_novehoP / 99;
+	int i, o, pocet_struktur = 0, percento = velkost_novehoP / 100;
+	printf("100%% = %d, percento = %d\n",velkost_novehoP, percento);
 	for (i = 0; i < velkost_novehoP; i++) {		//prechadza permutacie
 		int zaciatok, koniec;
 		char prve_pismeno_slova = pole_slovNEW[i][0];
+
+		if (percento == 0) {
+			percento = 1;
+		}
 		if (i % percento == 0)
 			printf("#");
+
 		zaciatok = zaciatocny_index_pismena[prve_pismeno_slova - 'A'];
 		if (prve_pismeno_slova != 'Z') {
 			koniec = zaciatocny_index_pismena[prve_pismeno_slova + 1 - 'A'];
