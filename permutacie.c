@@ -116,7 +116,7 @@ int vymaz_opakovane(char** pole_slov, int n) {	//aj toto trva dlho
 void napln_nove(char** pole_slov, char** pole_slovNEW, int n, char *fixne, int fix_pozicia) {
 	int o = 0;
 	for (int i = 0; i < n; i++) {
-		if (pole_slov[i][0] != '*' && strlen(pole_slov[i]) >= fix_pozicia &&pole_slov[i][fix_pozicia]==fixne[0]  ) {
+		if (pole_slov[i][0] != '*' && strlen(pole_slov[i]) >= fix_pozicia && pole_slov[i][fix_pozicia]==fixne[0]  ) {
 			strcat(pole_slovNEW[o++], pole_slov[i]);
 		}
 	}
@@ -206,25 +206,21 @@ int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole
 	return pocet_struktur;
 }
 
-//void char_insert(char* str, char *fixne, int fix_pozicia) {
-//	char buf[DLZKA_SLOVA+1] ;
-//	strncpy(buf, str, fix_pozicia);
-//	buf[fix_pozicia] = '\0';
-//	strcat(buf, fixne);
-//	strcat(buf, str + fix_pozicia);
-//	/*strncpy(pom_p, dst, offset);
-//	strcat(pom_p, src);
-//	strcat(pom_p, dst + offset);*/
-//	
-//	printf("%s", buf);
-//
-//	int i = 0;
-//	while (buf[i] != '\0') {
-//		str[i] = buf[i];
-//		i++;
-//	}
-//	str[i] = '\0';
-//}
+void char_insert(char* str, char *fixne, int fix_pozicia) {
+	char buf[DLZKA_SLOVA+1] ;
+	strncpy(buf, str, fix_pozicia);
+	buf[fix_pozicia] = '\0';
+	strcat(buf, fixne);
+	strcat(buf, str + fix_pozicia);
+
+
+	int i = 0;
+	while (buf[i] != '\0') {
+		str[i] = buf[i];
+		i++;
+	}
+	str[i] = '\0';
+}
 
 
 
@@ -242,9 +238,8 @@ int main() {
 	strupr(fixne);
 	fix_pozicia = (fix_pozicia > strlen(str) ) ? strlen(str)  : fix_pozicia;
 
-	//char_insert(str, fixne, fix_pozicia); //toto som robil uplne zbytocne
-	str[strlen(str)-1] = fixne[0];
-	str[strlen(str) ] = '\0';
+	char_insert(str, fixne, fix_pozicia); //toto som robil uplne zbytocne, ale funguje to s tym
+
 
 	printf("%s %d %s \n", fixne, fix_pozicia,str);
 
