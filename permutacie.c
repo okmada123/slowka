@@ -206,15 +206,45 @@ int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole
 	return pocet_struktur;
 }
 
+void char_insert(char* str, char *fixne, int fix_pozicia) {
+	char buf[DLZKA_SLOVA+1] ;
+	strncpy(buf, str, fix_pozicia);
+	buf[fix_pozicia] = '\0';
+	strcat(buf, fixne);
+	strcat(buf, str + fix_pozicia);
+	/*strncpy(pom_p, dst, offset);
+	strcat(pom_p, src);
+	strcat(pom_p, dst + offset);*/
+	
+	printf("%s", buf);
 
+	int i = 0;
+	while (buf[i] != '\0') {
+		str[i] = buf[i];
+		i++;
+	}
+	str[i] = '\0';
+}
 
 
 
 int main() {
-	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "";
-	
+	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "", fixne[2];
+	int fix_pozicia;
 	printf("Zadaj pismena, ktore mas (bez medzery): ");
-	scanf("%8s", str);
+	scanf("%7s", str);
+	getchar(); //nacita enter z predchadzajuceho scanf
+	printf("Zadaj fixne pismeno ");
+	//fixne = getchar();
+	scanf("%1s", fixne);
+	printf("Zadaj poziciu fixneho pismena: ");
+	scanf("%d", &fix_pozicia);
+
+	//fixne = (fixne >= 'A' && fixne <= 'Z') ? fixne : fixne - 'a' + 'A';
+	fix_pozicia = (fix_pozicia > strlen(str) ) ? strlen(str)  : fix_pozicia;
+	printf("%s %d\n", fixne, fix_pozicia);
+
+	char_insert(str, fixne, fix_pozicia);
 
 	int i,n = fact(strlen(str));
 	
