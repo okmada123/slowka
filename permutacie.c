@@ -44,6 +44,7 @@ void perm(char fix[], char str[], char **pole_slov) {
 		strcat(novyfix, fix);
 		novyfix[strlen(novyfix) + 1] = '\0';
 		novyfix[strlen(novyfix)] = '*';
+
 		for (i = 0; i < strlen(str); i++) {
 			novyfix[strlen(novyfix) - 1] = str[i];
 			//printf("%s\n", novyfix); //toto vyzera ze funguje zatim
@@ -204,6 +205,9 @@ int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole
 	printf("\n");
 	return pocet_struktur;
 }
+
+
+
 
 
 int main() {
