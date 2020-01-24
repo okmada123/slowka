@@ -23,7 +23,6 @@ void perm(char fix[], char str[], char **pole_slov) {
 			pole_slov[test - 1][o] = slovo[o];
 		}
 		pole_slov[test - 1][o] = '\0';
-
 		test++;
 
 		slovo[i] = str[1];
@@ -33,7 +32,6 @@ void perm(char fix[], char str[], char **pole_slov) {
 			pole_slov[test - 1][o] = slovo[o];
 		}
 		pole_slov[test - 1][o] = '\0';
-
 		test++;
 
 		return;
@@ -145,7 +143,7 @@ void ziskaj_hodnoty(int abc[]) {
 	fclose(fr);
 }
 
-int legit_slova_counter(unsigned int str_len, char* fixne, int fix_pozicia) {
+int legit_slova_counter(unsigned int str_len,  int fix_pozicia) {
 	FILE* fr;
 	int pocet_legit_slov = 0;
 	char pomocny_string[25];
@@ -153,14 +151,14 @@ int legit_slova_counter(unsigned int str_len, char* fixne, int fix_pozicia) {
 
 	fr = fopen("list.txt", "r");
 	while (fscanf(fr, "%s", pomocny_string) == 1) {
-		if (strlen(pomocny_string) <= str_len && strlen(pomocny_string) >= fix_pozicia && pomocny_string[fix_pozicia] == fixne[0])
+		if (strlen(pomocny_string) <= str_len && strlen(pomocny_string) >= fix_pozicia )
 			pocet_legit_slov++;
 	}
 	fclose(fr);
 	return pocet_legit_slov;
 }
 
-void nacitaj_legit_slova(char **pole_slovLEGIT,unsigned int str_len, char* fixne, int fix_pozicia) {
+void nacitaj_legit_slova(char **pole_slovLEGIT,unsigned int str_len, int fix_pozicia) {
 	FILE* fr;
 	int i = 0;
 	char pomocny_string[25];
@@ -168,8 +166,9 @@ void nacitaj_legit_slova(char **pole_slovLEGIT,unsigned int str_len, char* fixne
 
 	fr = fopen("list.txt", "r");
 	while (fscanf(fr, "%s", pomocny_string) == 1) {
-		if (strlen(pomocny_string) <= str_len && strlen(pomocny_string) >= fix_pozicia && pomocny_string[fix_pozicia] == fixne[0])
+		if (strlen(pomocny_string) <= str_len && strlen(pomocny_string) >= fix_pozicia ) {
 			strcpy(pole_slovLEGIT[i++], pomocny_string);
+		}
 	}
 	fclose(fr);
 }
@@ -185,7 +184,7 @@ int zisti_hodnotu_slova(char **pole_slovLEGIT,int abc[], int i) {
 	return value;
 }
 
-int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole_slovLEGIT, char** pole_slovNEW, int zaciatocny_index_pismena[],int fix_pozicia) {
+int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole_slovLEGIT, char** pole_slovNEW, int zaciatocny_index_pismena[],int fix_pozicia,char *fixne) {
 	//TOTO TRVA DLHO !!!!	
 
 	int i, o, pocet_struktur = 0;
@@ -205,7 +204,7 @@ int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole
 				koniec = pocet_legit_slov;
 
 			for (int o = zaciatok; o < koniec; o++) {		//tu musi byt optimalizovany cyklus - zaujima ma zaciatocne pismeno permutacie
-				if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0') {
+				if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0' && pole_slovLEGIT[o][fix_pozicia] == fixne[0]) {
 					pole_slovLEGIT[o][0] = '\0';
 
 					pocet_struktur++;
@@ -306,13 +305,13 @@ int main() {
 		printf("%s\n", pole_slovNEW[i]);*/
 
 	printf("Nacitavam slova zo slovnika...\n");
-	int pocet_legit_slov = legit_slova_counter(strlen(str), fixne, fix_pozicia);					
+	int pocet_legit_slov = legit_slova_counter(strlen(str), fix_pozicia);					
 	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));	//
 	for (i = 0; i < pocet_legit_slov; i++) {
 		pole_slovLEGIT[i] = (char*)calloc(strlen(str) + 1, sizeof(char));		//
 		pole_slovLEGIT[i][0] = '\0';
 	}
-	nacitaj_legit_slova(pole_slovLEGIT,strlen(str), fixne, fix_pozicia);							//
+	nacitaj_legit_slova(pole_slovLEGIT,strlen(str), fix_pozicia);							//
 	
 	//zistenie, na akych indexoch zacinaju ktore pismena v poli legit slov:
 	//#######################################################################################
@@ -336,9 +335,10 @@ int main() {
 													pole_slovLEGIT,
 													pole_slovNEW,
 													zaciatocny_index_pismena,
-													fix_pozicia);
+													fix_pozicia,
+													fixne);
 
-		nacitaj_legit_slova(pole_slovLEGIT, strlen(str), fixne, fix_pozicia); //sprav nieco, aby sa nemuselo druhy krat nacitavat legit pole
+		nacitaj_legit_slova(pole_slovLEGIT, strlen(str), fix_pozicia); //sprav nieco, aby sa nemuselo druhy krat nacitavat legit pole
 
 		struktura_slov* slovo = (struktura_slov*)malloc(sizeof(struktura_slov) * pocet_struktur);
 
@@ -368,7 +368,8 @@ int main() {
 				koniec = pocet_legit_slov;
 
 			for (int o = zaciatok; o < koniec; o++) {		//tu musi byt optimalizovany cyklus - zaujima ma zaciatocne pismeno permutacie
-				if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0') {
+				if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0' && pole_slovLEGIT[o][fix_pozicia] == fixne[0]) {
+
 					slovo[index].slovo[0] = '\0';
 					strcpy(slovo[index].slovo, pole_slovLEGIT[o]);
 					slovo[index].hodnota = zisti_hodnotu_slova(pole_slovLEGIT, abc, o);
