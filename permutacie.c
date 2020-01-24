@@ -137,7 +137,7 @@ void ziskaj_hodnoty(int abc[]) {
 	fclose(fr);
 }
 
-int legit_slova_counter(unsigned int str_len) {
+int legit_slova_counter(unsigned int str_len, char* fixne, int fix_pozicia) {
 	FILE* fr;
 	int pocet_legit_slov = 0;
 	char pomocny_string[25];
@@ -145,7 +145,7 @@ int legit_slova_counter(unsigned int str_len) {
 
 	fr = fopen("list.txt", "r");
 	while (fscanf(fr, "%s", pomocny_string) == 1) {
-		if (strlen(pomocny_string) <= str_len)
+		if (strlen(pomocny_string) <= str_len && strlen(pomocny_string) >= fix_pozicia && pomocny_string[fix_pozicia] == fixne[0])
 			pocet_legit_slov++;
 	}
 	fclose(fr);
@@ -232,16 +232,14 @@ int main() {
 	printf("Zadaj pismena, ktore mas (bez medzery): ");
 	scanf("%7s", str);
 	getchar(); //nacita enter z predchadzajuceho scanf
-	printf("Zadaj fixne pismeno ");
-	//fixne = getchar();
+	printf("Zadaj fixne pismeno: ");
 	scanf("%1s", fixne);
 	printf("Zadaj poziciu fixneho pismena: ");
 	scanf("%d", &fix_pozicia);
 	strupr(fixne);
-	fix_pozicia = (fix_pozicia > strlen(str) ) ? strlen(str)  : fix_pozicia;
+	fix_pozicia = (fix_pozicia > strlen(str) -1) ? strlen(str) -1 : fix_pozicia;
 
 	char_insert(str, fixne, fix_pozicia); //toto som robil uplne zbytocne, ale funguje to s tym
-
 
 	printf("%s %d %s \n", fixne, fix_pozicia,str);
 
@@ -285,7 +283,7 @@ int main() {
 		printf("%s\n", pole_slovNEW[i]);*/
 
 	printf("Nacitavam slova zo slovnika...\n");
-	int pocet_legit_slov = legit_slova_counter(strlen(str));					//
+	int pocet_legit_slov = legit_slova_counter(strlen(str), fixne, fix_pozicia);					
 	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));	//
 	for (i = 0; i < pocet_legit_slov; i++) {
 		pole_slovLEGIT[i] = (char*)calloc(strlen(str) + 1, sizeof(char));		//
