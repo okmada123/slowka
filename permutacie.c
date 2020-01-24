@@ -218,7 +218,7 @@ int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole
 			nacitavanie_percent(velkost_novehoP, i);
 
 			for (int o = 0; o < pocet_legit_slov; o++) {		//tu musi byt optimalizovany cyklus - zaujima ma zaciatocne pismeno permutacie
-				if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0') {
+				if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0' && pole_slovLEGIT[o][0] == fixne[0]) {
 					pole_slovLEGIT[o][0] = '\0';
 
 					pocet_struktur++;
@@ -386,7 +386,7 @@ int main() {
 
 
 			for (int o = 0; o < pocet_legit_slov; o++) {		//tu musi byt optimalizovany cyklus - zaujima ma zaciatocne pismeno permutacie
-				if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0') {
+				if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0' && pole_slovLEGIT[o][0]==fixne[0]) {
 					slovo[index].slovo[0] = '\0';
 					strcpy(slovo[index].slovo, pole_slovLEGIT[o]);
 					slovo[index].hodnota = zisti_hodnotu_slova(pole_slovLEGIT, abc, o);
