@@ -254,13 +254,13 @@ int main() {
 	int fix_pozicia;
 	printf("Zadaj pismena, ktore mas (bez medzery): ");
 	scanf("%7s", str);
-	getchar(); //nacita enter z predchadzajuceho scanf
+	while (getchar() != '\n'); //vyprazdenie buffera
 	printf("Zadaj fixne pismeno: ");
 	scanf("%1s", fixne);
 	printf("Zadaj poziciu fixneho pismena: ");
 	scanf("%d", &fix_pozicia);
 	strupr(fixne);
-	fix_pozicia = (fix_pozicia > strlen(str) -1) ? strlen(str) -1 : fix_pozicia;
+	fix_pozicia = (fix_pozicia > strlen(str)) ? strlen(str) : fix_pozicia;
 
 	char_insert(str, fixne, fix_pozicia); //toto som robil uplne zbytocne, ale funguje to s tym
 
