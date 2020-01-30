@@ -213,11 +213,20 @@ int zisti_pocet_struktur(int pocet_legit_slov, int  velkost_novehoP, char **pole
 		}
 	}
 	else {
+		int zaciatok, koniec;
+
 		for (i = 0; i < velkost_novehoP; i++) {		//prechadza permutacie
 
 			nacitavanie_percent(velkost_novehoP, i);
 
-			for (int o = 0; o < pocet_legit_slov; o++) {		//tu musi byt optimalizovany cyklus - zaujima ma zaciatocne pismeno permutacie
+			zaciatok = zaciatocny_index_pismena[fixne[0] - 'A'];
+			if (fixne[0] != 'Z') {
+				koniec = zaciatocny_index_pismena[fixne[0] + 1 - 'A'];
+			}
+			else
+				koniec = pocet_legit_slov;
+
+			for (int o = zaciatok; o < koniec; o++) {		//tu musi byt optimalizovany cyklus - zaujima ma zaciatocne pismeno permutacie
 				if (strlen(pole_slovLEGIT[o]) > 2 && strstr(pole_slovNEW[i], pole_slovLEGIT[o]) != NULL && pole_slovLEGIT[o][0] != '\0' && pole_slovLEGIT[o][0] == fixne[0]) {
 					pole_slovLEGIT[o][0] = '\0';
 
