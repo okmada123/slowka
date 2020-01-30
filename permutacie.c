@@ -158,7 +158,7 @@ int legit_slova_counter(unsigned int str_len,  int fix_pozicia) {
 	return pocet_legit_slov;
 }
 
-void nacitaj_legit_slova(char **pole_slovLEGIT,unsigned int str_len, int fix_pozicia) {
+void nacitaj_legit_slova(char **pole_slovLEGIT,unsigned int str_len, int fix_pozicia, char** pole_slovLEGIT_copy) {
 	FILE* fr;
 	int i = 0;
 	char pomocny_string[25];
@@ -167,7 +167,8 @@ void nacitaj_legit_slova(char **pole_slovLEGIT,unsigned int str_len, int fix_poz
 	fr = fopen("list.txt", "r");
 	while (fscanf(fr, "%s", pomocny_string) == 1) {
 		if (strlen(pomocny_string) <= str_len && strlen(pomocny_string) >= fix_pozicia ) {
-			strcpy(pole_slovLEGIT[i++], pomocny_string);
+			strcpy(pole_slovLEGIT[i], pomocny_string);
+			strcpy(pole_slovLEGIT_copy	[i++], pomocny_string);
 		}
 	}
 	fclose(fr);
@@ -253,19 +254,37 @@ void char_insert(char* str, char *fixne, int fix_pozicia) {
 	str[i] = '\0';
 }
 
+void zisti_zaciatocne_indexy_pismen(int *zaciatocny_index_pismena, char **pole_slovLEGIT, int pocet_legit_slov) {
+	int i, index = 0;
+	char hladame = 'B';
+	zaciatocny_index_pismena[index++] = 0;
+	
+	for (i = 0; i < pocet_legit_slov; i++) {
+		if (pole_slovLEGIT[i][0] == hladame) {
+			 zaciatocny_index_pismena[index++] = i;
+			hladame++;
+		}
+	}
+}
+
+
+
 
 
 int main() {
 	char str[DLZKA_SLOVA + 1], fix[DLZKA_SLOVA + 1] = "", fixne[2];
 	int fix_pozicia;
+
 	printf("Zadaj pismena, ktore mas (bez medzery): ");
 	scanf("%7s", str);
 	while (getchar() != '\n'); //vyprazdenie buffera
+
 	printf("Zadaj fixne pismeno: ");
 	scanf("%1s", fixne);
+	strupr(fixne);
+
 	printf("Zadaj poziciu fixneho pismena: ");
 	scanf("%d", &fix_pozicia);
-	strupr(fixne);
 	fix_pozicia = (fix_pozicia > strlen(str)) ? strlen(str) : fix_pozicia;
 
 	char_insert(str, fixne, fix_pozicia); //toto som robil uplne zbytocne, ale funguje to s tym
@@ -313,39 +332,28 @@ int main() {
 
 	printf("Nacitavam slova zo slovnika...\n");
 	int pocet_legit_slov = legit_slova_counter(strlen(str), fix_pozicia);					
-	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));	//
+	char** pole_slovLEGIT = (char**)calloc(pocet_legit_slov, sizeof(char*));
+	char** pole_slovLEGIT_copy = (char**)calloc(pocet_legit_slov, sizeof(char*));	//
 	for (i = 0; i < pocet_legit_slov; i++) {
 		pole_slovLEGIT[i] = (char*)calloc(strlen(str) + 1, sizeof(char));		//
 		pole_slovLEGIT[i][0] = '\0';
+		pole_slovLEGIT_copy[i] = (char*)calloc(strlen(str) + 1, sizeof(char));		//
+		pole_slovLEGIT_copy[i][0] = '\0';
 	}
-	nacitaj_legit_slova(pole_slovLEGIT,strlen(str), fix_pozicia);							//
+	nacitaj_legit_slova(pole_slovLEGIT,strlen(str), fix_pozicia, pole_slovLEGIT_copy);	//kopia je pri hladani poctu struktur modifikovana
 	
 	//zistenie, na akych indexoch zacinaju ktore pismena v poli legit slov:
-	//#######################################################################################
 	int zaciatocny_index_pismena[26];
-	int index = 0;
-	zaciatocny_index_pismena[index++] = 0;
-	char hladame = 'B';
-	for (i = 0; i < pocet_legit_slov; i++) {
-		if (pole_slovLEGIT[i][0] == hladame) {
-			zaciatocny_index_pismena[index++] = i;
-			hladame++;
-		}
-	}
+	zisti_zaciatocne_indexy_pismen(zaciatocny_index_pismena, pole_slovLEGIT, pocet_legit_slov);
 
-
-	/*for (i = 0; i < 26; i++)
-		printf("%s\n", pole_slovLEGIT[zaciatocny_index_pismena[i]]);*/
-
-	int pocet_struktur = zisti_pocet_struktur(pocet_legit_slov,	//keby sa dalo pole poslat ako kopia, nemuseli by sa nacitavaz znovu legit slova
+	int pocet_struktur = zisti_pocet_struktur(pocet_legit_slov,	
 												velkost_novehoP,	//TOTO TRVA DLHO ALE UZ VYBAVENE
-												pole_slovLEGIT,
+												pole_slovLEGIT_copy,
 												pole_slovNEW,
 												zaciatocny_index_pismena,
 												fix_pozicia,
 												fixne);
 
-	nacitaj_legit_slova(pole_slovLEGIT, strlen(str), fix_pozicia); //sprav nieco, aby sa nemuselo druhy krat nacitavat legit pole
 
 	struktura_slov* slovo = (struktura_slov*)malloc(sizeof(struktura_slov) * pocet_struktur);
 
@@ -356,13 +364,11 @@ int main() {
 	//TOTO TRVA DLHO !!!!!!!!!
 	printf("Hladam slova...\n");
 
-	index = 0;
+	int index = 0;
 	//iny sposob hladania slov:
 	int zaciatok, koniec;
 	if (fix_pozicia > 0) {
 		for (i = 0; i < velkost_novehoP; i++) {		//prechadza permutacie
-			//int nejake_cislo = pole_slovNEW[i][0] - 'A';
-			//printf("nejakecislo: %d\n", nejake_cislo);
 			char prve_pismeno_slova = pole_slovNEW[i][0];
 
 			nacitavanie_percent(velkost_novehoP, i);
